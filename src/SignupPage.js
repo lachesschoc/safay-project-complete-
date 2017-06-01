@@ -154,7 +154,7 @@ export default class SignupPage extends Component {
   async signup(email, pass) {
 
       try {
-          await firebase.auth().createUserWithEmailAndPassword(email, pass);
+          await firebase.auth().createUserWithEmailAndPassword(email, pass); //สร้าง id pass ที่กรอกไปเก็บใน firebase
 
           this.login(email, pass);
 
@@ -162,7 +162,7 @@ export default class SignupPage extends Component {
 
              if (user) {
                // Determine if user needs to verify email
-               var emailVerified = !user.providerData || !user.providerData.length || user.providerData[0].providerId != 'password' || user.emailVerified;
+              // var emailVerified = !user.providerData || !user.providerData.length || user.providerData[0].providerId != 'password' || user.emailVerified;
 
                // Upsert profile information
               // var profileRef = firebase.database().ref(`profiles/${user.uid}`);
@@ -174,7 +174,7 @@ export default class SignupPage extends Component {
                    displayName: this.state.name
                })
 
-               Actions.home();
+               Actions.home(); //ปุ่ม กดไปหน้า map หลังกดจะขึ้น popup SUCCESS
              }else{
                Actions.login();
              }
@@ -201,14 +201,14 @@ export default class SignupPage extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    if(this.validateEmail(this.state.email) != true)
+    if(this.validateEmail(this.state.email) != true) //ถ้าemail ไม่ถูกขึ้น invalid email
     {
       alert('invalid email');
 
       return;
     }
 
-    if(this.validatePassword(this.state.password, this.state.passwordConfirm) != true)
+    if(this.validatePassword(this.state.password, this.state.passwordConfirm) != true) // ถ้ากรอก password กับ Confirm password ไม่ตรงกัน ขึ้น not match
     {
       alert('Passwords do not match');
 
@@ -219,13 +219,13 @@ export default class SignupPage extends Component {
 
   }
 
-  validateEmail(email)
+  validateEmail(email) //รูปแบบ email ที่กรอก บางคนไม่ใส่ @ ก็ผิดรูปแบบ
   {
     var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
   }
 
-  validatePassword(password, passwordConfirm)
+  validatePassword(password, passwordConfirm) //ถ้าตรงกัน ก็ true ไม่ตรงก็ false
   {
     if(password == passwordConfirm)
     {
@@ -241,9 +241,9 @@ export default class SignupPage extends Component {
 	render() {
   return (
     <View style={styles.container}>
-
+// Userinterface
         <Image
-          source={background}
+          source={background} //background
           style={[styles.container, styles.bg]}
           resizeMode="cover"
         >
@@ -330,7 +330,7 @@ export default class SignupPage extends Component {
 
           <View style={styles.footerContainer}>
 
-            <TouchableOpacity onPress={(event)=>this.handleSubmit(event)} style={styles.wrapper}>
+            <TouchableOpacity onPress={(event)=>this.handleSubmit(event)} style={styles.wrapper}> //กดปุ่ม confirm มันจะไปเรียกฟังก์ชันด้านบน handleSubmit
               <View style={styles.signup}>
                 <Text style={styles.Confirmtext} >Confirm</Text>
               </View>
@@ -338,7 +338,7 @@ export default class SignupPage extends Component {
 
 
 
-						<TouchableOpacity onPress={()=>Actions.login()} style={styles.backButton}>
+						<TouchableOpacity onPress={()=>Actions.login()} style={styles.backButton}> // กลับไปหน้า login
 							<Text style={styles.backtext} >Back</Text>
 						</TouchableOpacity>
 

@@ -20,8 +20,8 @@ export default class Profile extends Component {
       uid:'',
       name: '',
       email:'',
-      photoUrl:'',
-      emailVerified:'',
+      photoUrl:'', //ไม่เกี่ยว
+      emailVerified:'', //ไม่เกี่ยว
   }
   this.setState = this.setState.bind(this)
 }
@@ -31,13 +31,13 @@ export default class Profile extends Component {
 
   componentWillMount()
   {
-      this.getProfile()
+      this.getProfile() //ไปfunction get profile (line 55)
   }
 
  getDisplayName(uid){
     try {
        var self = this;
-       var profileRef = firebase.database().ref(`profiles/${uid}/details`);
+       var profileRef = firebase.database().ref(`profiles/${uid}/details`); //ไปดึงมาจาก firebase
        var displayName ="";
 
        profileRef.on('value', (profile)=> {
@@ -60,12 +60,12 @@ export default class Profile extends Component {
 
     if (user != null) {
 
-      this.getDisplayName(user.uid);
+      this.getDisplayName(user.uid); //เรียก getDisplayName
       self.setState({
         uid : user.uid,
         email : user.email,
-        photoUrl : user.photoUrl,
-        emailVerified : user.emailVerified,
+        photoUrl : user.photoUrl, //ไม่เกี่ยว
+        emailVerified : user.emailVerified, //ไม่เกี่ยว
 
       })
     }else{
@@ -93,12 +93,12 @@ export default class Profile extends Component {
 		return (
       <View style={styles.container}>
         <Text style={styles.welcome}>
-          <Text style={styles.textcolor}> Name: {'\n'} </Text>
+          <Text style={styles.textcolor}> Name: {'\n'} </Text> //Name: + ชื่อจาก firebase
           {this.state.name+'\n'} {'\n'}
-          <Text style={styles.textcolor}> E-mail: {'\n'} </Text>
+          <Text style={styles.textcolor}> E-mail: {'\n'} </Text> //e-mail + email จาก firebase
           {this.state.email+'\n'}
         </Text>
-        <TouchableOpacity onPress={()=>this.logout()}>
+        <TouchableOpacity onPress={()=>this.logout()}> //ปุ่ม logout
           <View style={styles.Buttonlogout} >
             <Text style={styles.logout}>Logout</Text>
           </View>

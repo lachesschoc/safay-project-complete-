@@ -1,6 +1,6 @@
 
 import * as firebase from "firebase";
-
+//api key firebase
 firebase.initializeApp({
    apiKey: "AIzaSyCF3p0dzLG3XV7lYgpIuxfQwRoU7FPu6c8",
    authDomain: "safay-c096f.firebaseapp.com",

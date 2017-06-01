@@ -24,27 +24,27 @@ export default class App extends Component {
 	}
 
   componentDidMount(){
-    this.isLogin()
+    this.isLogin() //เริ่มแรกไปที่ function login
   }
 
   isLogin(){
-    firebase.auth().onAuthStateChanged(function(user) {
+    firebase.auth().onAuthStateChanged(function(user) { //เช็ค firebase authen
       if (user) {
-        Actions.home();
+        Actions.home(); //ถ้ามีก็ไปหน้า map
       } else {
-       Actions.login();
+       Actions.login(); //ไม่มีก็อยู่หน้า login
       }
     });
   }
 
   render() {
     return (
-      <Router>
+      <Router> //ตัวที่กดแล้วไปหน้าอื่น
       <Scene key="modal" component={Modal} >
-        <Scene key="root" hideNavBar hideTabBar>
-          <Scene key="home" component={Map} title="Home" type={ActionConst.REPLACE}/>
-          <Scene key="login" component={Loginform} initial={true} type={ActionConst.REPLACE}/>
-          <Scene key="signup" component={Signup} title="Signup" />
+        <Scene key="root" hideNavBar hideTabBar> //ซ่อน tabbar
+          <Scene key="home" component={Map} title="Home" type={ActionConst.REPLACE}/> //หน้า map
+          <Scene key="login" component={Loginform} initial={true} type={ActionConst.REPLACE}/> //หน้าlogin
+          <Scene key="signup" component={Signup} title="Signup" /> //หน้า signup
         </Scene>
       </Scene>
       </Router>

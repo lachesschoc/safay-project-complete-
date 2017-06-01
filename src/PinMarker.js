@@ -24,6 +24,7 @@ class PinMarker extends React.Component {
   render() {
     const { fontSize, text, backgroundColor,borderColor, color } = this.props;
     return (
+      //สร้าง marker
       <View style={styles.container}>
         <View style={[styles.bubble,{backgroundColor:backgroundColor, borderColor:borderColor}]}>
           <Text style={[styles.text, { fontSize , color:color}]}>{text}</Text>

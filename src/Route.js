@@ -41,9 +41,9 @@ export default class Route extends Component {
 			<View style={styles.container}>
 			<ScrollableTabView
 			style={{marginTop: 20, }}
-			renderTabBar={() => <ScrollableTabBar />}
+			renderTabBar={() => <ScrollableTabBar />} //tabbar ด้านบน route, profile, Information
 		>
-				<Route2 tabLabel="Route" data={this.state.data} callbackFromRoute={()=>this.setNewData()}/>
+				<Route2 tabLabel="Route" data={this.state.data} callbackFromRoute={()=>this.setNewData()}/> //เรียกค่าใหม่จากหน้า route
 				<Profile tabLabel="Profile" />
 				<Info tabLabel="Information" />
 			</ScrollableTabView>

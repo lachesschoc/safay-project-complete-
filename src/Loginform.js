@@ -11,8 +11,8 @@ import {
 } from 'react-native';
 
 import firebase from './Firebase';
-import Button from "react-native-button";
-import UserInput from './UserInput';
+import Button from "react-native-button"; //moudule in react-native library
+// import UserInput from './UserInput'; 
 import Wallpaper from './Wallpaper';
 import usernameImg from '../image/username.png';
 import passwordImg from '../image/password.png';
@@ -38,26 +38,26 @@ export default class Loginform extends Component {
 
   isLogin(){
     firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
+      if (user) { //ไม่เกี่ยว
       //  Actions.home();
       }
     });
   }
 
-	async login(email, pass) {
+	async login(email, pass) { // login ด้วย firebase
 
 	    try {
-	        await firebase.auth().signInWithEmailAndPassword(email, pass);
+	        await firebase.auth().signInWithEmailAndPassword(email, pass); //ถ้าตรงกับข้อมูลใน firebase ไปหน้า map
 
 	        console.log("Logged In!");
 
 					Actions.home();
 	        // Navigate to the Home page
 
-	    } catch (error) {
+	    } catch (error) { //ถ้าผิด
 	        console.log(error.toString())
 
-					Alert.alert(error.toString())
+					Alert.alert(error.toString()) //ขึ้นเตือน message error
 	    }
 
 	}
@@ -65,13 +65,13 @@ export default class Loginform extends Component {
 
 	render() {
 		return (
-			<Wallpaper>
+			<Wallpaper> //ใส่ Wallpaper ไปดึงมาจาก Wallpaper.js
 			<View style={styles.container}>
 				<Logo />
 					<View style={styles.container2}>
 					<KeyboardAvoidingView behavior='padding' >
 						<UserInput source={usernameImg}
-							placeholder='Username'
+							placeholder='Username' //ช่องใส่ username
 							autoCapitalize={'none'}
 							returnKeyType={'done'}
 							autoCorrect={false}
@@ -80,7 +80,7 @@ export default class Loginform extends Component {
 							onChangeText={(text) => this.setState({email: text})}/>
 						<UserInput source={passwordImg}
 							secureTextEntry={true}
-							placeholder='Password'
+							placeholder='Password' //ช่องใส่pass
 							returnKeyType={'done'}
 							autoCapitalize={'none'}
 							autoCorrect={false}
@@ -106,11 +106,11 @@ export default class Loginform extends Component {
 							top: -120,
 							justifyContent: 'center',
 						}}
-						onPress={()=>this.login(this.state.email,this.state.password)}>
+						onPress={()=>this.login(this.state.email,this.state.password)}> //กดปุ่ม login ส่งค่าที่ ใส่ email และ password ไปเช็ค ที่firebase ในฟังก์ชัน login(line 47)
                 <Text style={{color: '#fff',fontWeight: '700',fontSize: 15 , textAlign: 'center'}}>Login</Text>
         </TouchableOpacity>
 				<Text style={styles.Doyou}> Do not have an account yet?</Text>
-				<TouchableOpacity onPress={()=>Actions.signup()}>
+				<TouchableOpacity onPress={()=>Actions.signup()}> //ปุ่ม signup
 					<Text style={styles.Sign} >SIGN UP</Text>
 				</TouchableOpacity>
 			</View>

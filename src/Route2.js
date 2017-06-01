@@ -84,16 +84,16 @@ var lastTime = 0; // *ห้ามเปลี่ยนค่า เอาไว
 var removeIndex = 0; // *ห้ามเปลี่ยนค่า  // => start data index
 var countData = 1000; // *ปรับได้ตามความเหมาะสม // จำนวนข้อมูลที่ต้องการส่ง
 var removeData = 1000; // *ปรับได้ตามความเหมาะสม // จำนวนข้อมูลเก่าที่ต้องการลบก่อนเพิ่มเข้าไปใหม่
-var resetDataCount = 100000; //*ปรับได้ตามความเหมาะสม //ค่าข้อมูลทั้งหมดก่อนที่จะ reset ค่าใหม่ เพื่อคืนความจำ ram
 
 
-const LATITUDE_DELTA = 0.00222;
-const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
+const LATITUDE_DELTA = 0.00222; //ปรับ zoom map ยิ่ง ค่าน้อย ยิ่ง zoom มาก
+const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;  // คูณสัดส่วน size ตามจอ
 
-export default class Route2 extends Component {
+export default class Route2 extends Component { //FIRST
 	constructor(props){
 	super(props);
 
+	//ค่าเริ่มต้น อันนี้ใช้กับview ตอนrender คือรูปหน้า route ที่เป็นเป็น ค่าด้านล่าง
 	this.state = {
 		data:'',
 		datetime:'',
@@ -146,6 +146,7 @@ export default class Route2 extends Component {
 		 }else if(feature.prop == 'bump'){
 			 mkColor = color.bump;
 		 }
+		 //เพิ่มค่าเข้าไปยังอาเรย์  makers
 			markers.push({key:i,'coordinate':{'latitude':feature.location[0],'longitude':feature.location[1]},title:feature.prop,color:mkColor})
 	 }
 	}
@@ -163,6 +164,7 @@ export default class Route2 extends Component {
 		strDate = strDate + "T" +  ("0" + date.getHours()).slice(-2) + "-" + ("0" + date.getMinutes()).slice(-2) + "-" + ("0" + date.getSeconds()).slice(-2);
    console.log('DateTime : '+strDate);
 	  var url = 'http://gisddns.hopto.org:5555';
+		// ส่งค่าไปหา api
 		fetch(url,{
 			method: 'POST',
 			headers: {
@@ -181,6 +183,7 @@ export default class Route2 extends Component {
 
 
 			//Set Markers
+			// พล็อต markers  ลงแผนที่
 			this.setMapMarker(responseData);
 		})
 		.catch((error) => {
@@ -206,7 +209,7 @@ export default class Route2 extends Component {
 			lastTime = dataAcc.time;
 		}else{
 			if(dataAcc.time != 0){
-				dataAcc.time = dataAcc.time + 0.01;
+				dataAcc.time = dataAcc.time + 0.01; // ให้เวลาเพิ่มขึ้นทุก 10 ms
 			}else{
 				dataAcc.time = data.rotationRate.timestamp;
 			}
@@ -216,7 +219,7 @@ export default class Route2 extends Component {
 			}
 
 		}
-
+      // เพิ่มค่าเซ็นเซอร์ลง object sensors อันนี้คือค่าที่ส่งไปที่เซิฟ
 			sensors = {
 				latitude:this.state.region.latitude,
 				longitude:this.state.region.longitude,
@@ -226,20 +229,18 @@ export default class Route2 extends Component {
 				Accx: (data.acceleration.x * 9.81).toFixed(4),
 				Accy: (data.acceleration.y * 9.81).toFixed(4),
 				Accz: (data.acceleration.z * 9.81).toFixed(4),
-				Gyx: this.state.Gyx,
-				Gyy: this.state.Gyy,
-				Gyz: this.state.Gyz,
 				Magx: data.magneticField.x.toFixed(4),
 				Magy: data.magneticField.y.toFixed(4),
 				Magz: data.magneticField.z.toFixed(4),
 				/**
-				Magx: (Math.random() * (63.999 - 62.001) + 62.001).toFixed(3),
-				Magy: (Math.random() * (12.999 - 11.001) + 11.001).toFixed(3),
-				Magz: (Math.random() * (1.999 - 0.001) + 0.001).toFixed(3),
+				Magx: (Math.random() * (63.999 - 62.001) + 62.001).toFixed(3), อันนี้ไม่เกีี่ยว
+				Magy: (Math.random() * (12.999 - 11.001) + 11.001).toFixed(3), อันนี้ไม่เกี่ยว
+				Magz: (Math.random() * (1.999 - 0.001) + 0.001).toFixed(3), อันนี้ไม่เกี่ยว
 				*/
-				time: dataAcc.time,//new Date().getTime()/1000,
+				time: dataAcc.time,//new Date().getTime()/1000, comment อันนี้คือ timestamp
 			};
 
+		//เพิ่มค่าเซนเซอร์ลงในอารเรย์
 		dataAcc.data.push(sensors);
 
 		// เอาไว้แสดงค่าใน view
@@ -299,7 +300,7 @@ export default class Route2 extends Component {
 								dataId:this.state.dataId +1,
 								data:sensorData,
 							});
-							this.props.callbackFromRoute();
+							this.props.callbackFromRoute(); //เรียกcallback ไปหน้า route
 
 						}else{
 							this.setState({
@@ -307,9 +308,9 @@ export default class Route2 extends Component {
 							});
 						}
 
+					//ไม่ใช่ทั้งค่าแรก และ ค่า 1000 สุดท้าย
 					}else{
 						// ถ้าค่า GPS ไม่เปลี่ยน ไม่ต้องใส่ค่าเข้าไป
-						//if(dataAcc.data[i-1].latitude == dataAcc.data[i].latitude && dataAcc.data[i-1].longitude == dataAcc.data[i].longitude){
 						if(dataAcc.data[i].time - lastTime < 1){
 
 							sensorDataRow= dataAcc.data[i].time+
@@ -350,15 +351,15 @@ export default class Route2 extends Component {
 		}
 	}
 
-	componentWillReceiveProps(nextProps){
+	componentWillReceiveProps(nextProps){ //รับpropค่าใหม่ 3
 
-    if(this.props.data != nextProps.data){
+    if(this.props.data != nextProps.data){ //จากโค้ด callbackFromRoute() จะไป update prop.data ให้เป็นค่าใหม่
 			console.log('getDataApi');
-			this.getDataApi();
+			this.getDataApi(); //พอเป็นค่าใหม่ก็จะส่ง sensors_data ไปที่ api ตาม function getDataApi ด้านบน
     }
   }
 
-componentWillUnmount(){
+componentWillUnmount(){ //6
 	MotionSensors.stopGyroUpdates();
 	MotionSensors.stopAccelerometerUpdates();
 	MotionSensors.stopMagnetometerUpdates();
@@ -366,7 +367,7 @@ componentWillUnmount(){
 	timer.clearInterval(this,'MotionSensors');
 }
 
-componentDidMount() {
+componentDidMount() { //2
 
 		// รับค่า GPS จากค่าเริ่มต้น
 		navigator.geolocation.getCurrentPosition(
@@ -385,7 +386,7 @@ componentDidMount() {
 			this.setState({ region: {latitude: lastPosition.coords.latitude, longitude:lastPosition.coords.longitude ,latitudeDelta:LATITUDE_DELTA,longitudeDelta: LONGITUDE_DELTA} });
     });
 
-		MotionSensors.setGyroUpdateInterval(0.01); // in seconds
+		MotionSensors.setGyroUpdateInterval(0.01); // set ให้ sensorวิ่ง 10 ms
 		MotionSensors.setAccelerometerUpdateInterval(0.01);
 		MotionSensors.setMagnetometerUpdateInterval(0.01);
 		MotionSensors.startGyroUpdates();
@@ -394,6 +395,7 @@ componentDidMount() {
 
 		timer.setInterval(this, 'MotionSensors', ()=>{
 			MotionSensors.getMotionData( (error,data)=>{
+				//อันไว้เก็บและshow ใน มือถือ
 					if(this.state.time != 0 || this.state.time != ''){this.setData(data);}
 					this.setState({
 						Gyx: data.rotationRate.x,
@@ -420,9 +422,9 @@ onRegionChange(region) {
 }
 
 //ไม่ได้ใช้งาน
-randomColor() {
-  return `#${Math.floor(Math.random() * 16777215).toString(16)}`;
-}
+randomColor() { //ไม่ได้ใช้
+  return `#${Math.floor(Math.random() * 16777215).toString(16)}`; //ไม่ได้ใช้
+} //ไม่ได้ใช้
 
 	render() {
 		return (
@@ -437,19 +439,20 @@ randomColor() {
         //  onRegionChange={this.onRegionChange}
 
         >
-				{this.state.markers.map(marker => (
+				{this.state.markers.map(marker => ( // พล็อต markers ทั้งหมดลงแผนที่
 				 <Marker
-					 key={marker.key}
-					 coordinate={marker.coordinate}
-					 pinColor={marker.color.backgroundColor}>
+					 key={marker.key} //marker ตามจำนวน
+					 coordinate={marker.coordinate} //marker ตาม แผนทีตำแหน่ง
+					 pinColor={marker.color.backgroundColor}> //marker ตาม สีที่ตั้ง
 				 {<PinMarker
-				 		text={marker.title}
+				 		text={marker.title} //ตามtitle good, bad, bump
 						backgroundColor={marker.color.backgroundColor}
 						color={marker.color.colorText}
 						borderColor={marker.color.borderColor}/>}
 				 </Marker>
 				))}
         </MapView>
+				//ให้ค่ารันโชว์บนมือถือ
 				<View style={styles.container}>
           <Text>
 					Data: {this.state.time}, 1, {this.state.region.latitude}, {this.state.region.longitude},

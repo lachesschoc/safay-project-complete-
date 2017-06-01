@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
 const Info = ()  => {
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => Communications.phonecall('911', true)}>
+      <TouchableOpacity onPress={() => Communications.phonecall('911', true)}> //ให้มือถือโทรออกที่เบอร์ 991
           <View style={styles.Button} >
             <Text style={styles.text} >แจ้งเหตุด่วนเหตุร้าย (911)</Text>
           </View>
